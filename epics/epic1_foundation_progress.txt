@@ -140,3 +140,59 @@ Format:
 **Notes:** All acceptance criteria met. PayPeriod model complete with full test coverage.
 **Commit:** 7844697
 
+## Iteration 5 - 2026-01-22
+**Task:** US-1.5 CalculationResult Model
+**Actions Taken:**
+- Created src/models/calculation_result.rs with:
+  - PayCategory enum with all required variants:
+    - Ordinary, OrdinaryCasual, Saturday, SaturdayCasual
+    - Sunday, SundayCasual, Overtime150, Overtime200
+  - PayLine struct with all required fields:
+    - date (NaiveDate)
+    - shift_id (String)
+    - category (PayCategory)
+    - hours (Decimal)
+    - rate (Decimal)
+    - amount (Decimal)
+    - clause_ref (String)
+  - AllowancePayment struct with all required fields:
+    - allowance_type (String, serialized as "type")
+    - description (String)
+    - units (Decimal)
+    - rate (Decimal)
+    - amount (Decimal)
+    - clause_ref (String)
+  - PayTotals struct with all required fields:
+    - gross_pay, ordinary_hours, overtime_hours, penalty_hours, allowances_total (all Decimal)
+  - AuditStep struct with all required fields:
+    - step_number (u32), rule_id, rule_name, clause_ref, reasoning (String)
+    - input, output (serde_json::Value)
+  - AuditWarning struct with code, message, severity (all String)
+  - AuditTrace struct with steps (Vec<AuditStep>), warnings (Vec<AuditWarning>), duration_us (u64)
+  - CalculationResult struct with all required fields:
+    - calculation_id (Uuid)
+    - timestamp (DateTime<Utc>)
+    - engine_version (String)
+    - employee_id (String)
+    - pay_period (PayPeriod)
+    - pay_lines (Vec<PayLine>)
+    - allowances (Vec<AllowancePayment>)
+    - totals (PayTotals)
+    - audit_trace (AuditTrace)
+  - Full serde Serialize/Deserialize support with snake_case for enums
+  - Rustdoc comments on all public items with examples
+- Updated src/models/mod.rs to export all new types
+- Added comprehensive unit tests:
+  - CR-001: gross_pay equals sum of pay_lines (225.50 from 100+50+75.50)
+  - Tests for all PayCategory serialization/deserialization
+  - Tests for PayLine, AllowancePayment, PayTotals serialization/deserialization
+  - Tests for AuditStep, AuditWarning, AuditTrace serialization
+  - Tests for CalculationResult serialization/deserialization
+  - Test for decimal precision and multiple pay lines sum
+  - Test for audit steps ordered iteration
+- Verified cargo build, cargo test (48 unit tests + 13 doc tests pass), cargo clippy pass
+- Ran cargo fmt
+**Result:** PASS
+**Notes:** All acceptance criteria met. CalculationResult model complete with full test coverage. Note: AuditTrace types are included here (fully implemented) as they are required fields of CalculationResult.
+**Commit:** c15331d
+

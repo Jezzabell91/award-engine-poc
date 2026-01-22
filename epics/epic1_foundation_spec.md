@@ -290,7 +290,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected_gross": "225.50"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.6",

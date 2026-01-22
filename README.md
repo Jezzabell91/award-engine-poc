@@ -139,6 +139,3 @@ When all user stories in an epic have `"passes": true`, Ralph outputs:
 | GET | /health | Service health check |
 | GET | /info | Supported awards and classifications |
 
-## License
-
-Proprietary - Tanda

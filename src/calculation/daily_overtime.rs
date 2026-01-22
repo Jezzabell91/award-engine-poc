@@ -207,10 +207,19 @@ mod tests {
         assert_eq!(result.audit_step.step_number, 1);
         assert_eq!(result.audit_step.rule_id, "daily_overtime_detection");
         assert_eq!(result.audit_step.clause_ref, "22.1(c), 25.1");
-        assert_eq!(result.audit_step.input["worked_hours"].as_str().unwrap(), "8");
+        assert_eq!(
+            result.audit_step.input["worked_hours"].as_str().unwrap(),
+            "8"
+        );
         assert_eq!(result.audit_step.input["threshold"].as_str().unwrap(), "8");
-        assert_eq!(result.audit_step.output["ordinary_hours"].as_str().unwrap(), "8");
-        assert_eq!(result.audit_step.output["overtime_hours"].as_str().unwrap(), "0");
+        assert_eq!(
+            result.audit_step.output["ordinary_hours"].as_str().unwrap(),
+            "8"
+        );
+        assert_eq!(
+            result.audit_step.output["overtime_hours"].as_str().unwrap(),
+            "0"
+        );
     }
 
     // ==========================================================================
@@ -227,8 +236,14 @@ mod tests {
         assert_eq!(result.overtime_hours, dec("2.0"));
 
         // Verify audit step output
-        assert_eq!(result.audit_step.output["ordinary_hours"].as_str().unwrap(), "8");
-        assert_eq!(result.audit_step.output["overtime_hours"].as_str().unwrap(), "2");
+        assert_eq!(
+            result.audit_step.output["ordinary_hours"].as_str().unwrap(),
+            "8"
+        );
+        assert_eq!(
+            result.audit_step.output["overtime_hours"].as_str().unwrap(),
+            "2"
+        );
     }
 
     // ==========================================================================

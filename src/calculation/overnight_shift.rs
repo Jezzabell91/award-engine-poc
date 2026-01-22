@@ -13,7 +13,7 @@ use crate::models::{AuditStep, Employee, EmploymentType, PayCategory, PayLine, S
 
 use super::base_rate::get_base_rate;
 use super::casual_loading::apply_casual_loading;
-use super::day_detection::{segment_by_day, DayType, ShiftSegment};
+use super::day_detection::{DayType, ShiftSegment, segment_by_day};
 use super::saturday_penalty::calculate_saturday_pay;
 use super::sunday_penalty::calculate_sunday_pay;
 
@@ -546,9 +546,7 @@ mod tests {
             .expect("Should have shift segmentation step");
 
         assert_eq!(segmentation_step.rule_name, "Shift Day Segmentation");
-        assert!(segmentation_step
-            .reasoning
-            .contains("crosses midnight"));
+        assert!(segmentation_step.reasoning.contains("crosses midnight"));
         assert!(segmentation_step.reasoning.contains("2 segments"));
     }
 

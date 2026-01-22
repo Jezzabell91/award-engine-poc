@@ -319,14 +319,32 @@ mod tests {
 
         // Check input contains expected fields
         assert_eq!(result.audit_step.input["hours"].as_str().unwrap(), "8");
-        assert_eq!(result.audit_step.input["base_rate"].as_str().unwrap(), "28.54");
-        assert_eq!(result.audit_step.input["employment_type"].as_str().unwrap(), "full_time");
-        assert_eq!(result.audit_step.input["day_type"].as_str().unwrap(), "Sunday");
+        assert_eq!(
+            result.audit_step.input["base_rate"].as_str().unwrap(),
+            "28.54"
+        );
+        assert_eq!(
+            result.audit_step.input["employment_type"].as_str().unwrap(),
+            "full_time"
+        );
+        assert_eq!(
+            result.audit_step.input["day_type"].as_str().unwrap(),
+            "Sunday"
+        );
 
         // Check output contains expected fields
-        assert_eq!(result.audit_step.output["multiplier"].as_str().unwrap(), "1.75");
-        assert_eq!(result.audit_step.output["effective_rate"].as_str().unwrap(), "49.945");
-        assert_eq!(result.audit_step.output["amount"].as_str().unwrap(), "399.56");
+        assert_eq!(
+            result.audit_step.output["multiplier"].as_str().unwrap(),
+            "1.75"
+        );
+        assert_eq!(
+            result.audit_step.output["effective_rate"].as_str().unwrap(),
+            "49.945"
+        );
+        assert_eq!(
+            result.audit_step.output["amount"].as_str().unwrap(),
+            "399.56"
+        );
     }
 
     #[test]
@@ -353,7 +371,10 @@ mod tests {
         let result = calculate_sunday_pay(&segment, &employee, dec("28.54"), &config, 1);
 
         // 2026-01-18 is a Sunday
-        assert_eq!(result.pay_line.date, NaiveDate::from_ymd_opt(2026, 1, 18).unwrap());
+        assert_eq!(
+            result.pay_line.date,
+            NaiveDate::from_ymd_opt(2026, 1, 18).unwrap()
+        );
     }
 
     #[test]

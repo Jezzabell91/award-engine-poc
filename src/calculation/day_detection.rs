@@ -340,14 +340,26 @@ mod tests {
         // First segment: Saturday 22:00 to 00:00 (2 hours)
         assert_eq!(segments[0].day_type, DayType::Saturday);
         assert_eq!(segments[0].hours, dec("2.0"));
-        assert_eq!(segments[0].start_time, make_datetime("2026-01-17", "22:00:00"));
-        assert_eq!(segments[0].end_time, make_datetime("2026-01-18", "00:00:00"));
+        assert_eq!(
+            segments[0].start_time,
+            make_datetime("2026-01-17", "22:00:00")
+        );
+        assert_eq!(
+            segments[0].end_time,
+            make_datetime("2026-01-18", "00:00:00")
+        );
 
         // Second segment: Sunday 00:00 to 06:00 (6 hours)
         assert_eq!(segments[1].day_type, DayType::Sunday);
         assert_eq!(segments[1].hours, dec("6.0"));
-        assert_eq!(segments[1].start_time, make_datetime("2026-01-18", "00:00:00"));
-        assert_eq!(segments[1].end_time, make_datetime("2026-01-18", "06:00:00"));
+        assert_eq!(
+            segments[1].start_time,
+            make_datetime("2026-01-18", "00:00:00")
+        );
+        assert_eq!(
+            segments[1].end_time,
+            make_datetime("2026-01-18", "06:00:00")
+        );
     }
 
     // ==========================================================================
@@ -508,9 +520,19 @@ mod tests {
         for segment in &segments {
             assert_eq!(
                 segment.start_time.date(),
-                segment.end_time.date()
+                segment
+                    .end_time
+                    .date()
                     .pred_opt()
-                    .map(|d| if segment.end_time.time() == chrono::NaiveTime::from_hms_opt(0, 0, 0).unwrap() { d } else { segment.end_time.date() })
+                    .map(|d| {
+                        if segment.end_time.time()
+                            == chrono::NaiveTime::from_hms_opt(0, 0, 0).unwrap()
+                        {
+                            d
+                        } else {
+                            segment.end_time.date()
+                        }
+                    })
                     .unwrap_or(segment.end_time.date())
                     .max(segment.start_time.date()),
                 "Segment should not cross midnight: {:?}",

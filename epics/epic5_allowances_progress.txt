@@ -20,3 +20,26 @@ Format:
 
 <!-- Ralph: Append your progress below this line. Do not modify entries above. -->
 
+## Iteration 1 - 2026-01-22
+**Task:** US-5.1 - Laundry Allowance - Per Shift
+**Actions Taken:**
+- Created `src/calculation/laundry_allowance.rs` module with:
+  - `calculate_laundry_allowance()` function that checks employee tags, calculates per-shift rate, and applies weekly cap
+  - `LaundryAllowanceResult` struct containing optional `AllowancePayment` and audit step
+  - Constants: `LAUNDRY_ALLOWANCE_TAG` ("laundry_allowance"), `LAUNDRY_ALLOWANCE_CLAUSE` ("15.2(b)")
+- Added module export to `src/calculation/mod.rs`
+- Implemented all test cases:
+  - LA-001: 1 shift with laundry tag → $0.32
+  - LA-002: 3 shifts with laundry tag → $0.96
+  - LA-003: 5 shifts hits cap → $1.49 (capped from $1.60)
+  - LA-004: 6 shifts exceeds cap → $1.49 (capped from $1.92)
+  - LA-005: no laundry tag → None
+- Added additional edge case tests (zero shifts, other tags, casual employee)
+- All audit trail includes cap application status and reasoning
+**Result:** PASS
+**Notes:**
+- `cargo build` succeeds
+- `cargo test` passes all 214 tests (12 new laundry allowance tests)
+- `cargo clippy` produces no warnings
+- Allowance type is "laundry", description is "Laundry Allowance" per spec
+

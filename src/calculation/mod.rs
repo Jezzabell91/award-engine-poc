@@ -4,12 +4,14 @@
 //! including base rate lookup, casual loading, ordinary hours calculations,
 //! day detection for weekend penalty rates, Saturday penalty rates, Sunday penalty rates,
 //! overnight shift calculations that span multiple days, daily overtime detection,
-//! weekday overtime rate calculation, and weekend overtime rate calculation.
+//! weekday overtime rate calculation, weekend overtime rate calculation, and
+//! laundry allowance calculation.
 
 mod base_rate;
 mod casual_loading;
 mod daily_overtime;
 mod day_detection;
+mod laundry_allowance;
 mod ordinary_hours;
 mod overnight_shift;
 mod overtime_audit;
@@ -32,3 +34,7 @@ pub use weekday_overtime::{
     WEEKDAY_OT_TIER_1_THRESHOLD, WeekdayOvertimeResult, calculate_weekday_overtime,
 };
 pub use weekend_overtime::{WeekendOvertimeResult, calculate_weekend_overtime};
+pub use laundry_allowance::{
+    LAUNDRY_ALLOWANCE_CLAUSE, LAUNDRY_ALLOWANCE_TAG, LaundryAllowanceResult,
+    calculate_laundry_allowance,
+};

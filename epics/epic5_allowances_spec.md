@@ -140,7 +140,7 @@ Implement automatic allowance calculation, specifically the laundry allowance. T
         "expected_result": "None"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-5.2",

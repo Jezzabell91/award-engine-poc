@@ -43,3 +43,30 @@ Format:
 - `cargo clippy` produces no warnings
 - Allowance type is "laundry", description is "Laundry Allowance" per spec
 
+## Iteration 2 - 2026-01-22
+**Task:** US-5.2 - Allowance in Calculation Result
+**Actions Taken:**
+- Added integration tests module to `src/calculation/laundry_allowance.rs`:
+  - `test_cral_001_single_shift_with_laundry_allowance`: Full-time 8h shift with laundry tag
+    - Verifies pay_lines_total = $228.32, allowances_total = $0.32, gross_pay = $228.64
+  - `test_cral_002_multiple_shifts_hit_laundry_cap`: Casual 5 shifts with laundry tag
+    - Verifies allowances_total = $1.49 (capped at weekly maximum)
+    - Confirms cap applied correctly (5 × $0.32 = $1.60 → capped to $1.49)
+  - `test_cral_003_no_allowances`: Full-time 8h shift without laundry tag
+    - Verifies allowances array is empty, allowances_total = $0.00
+- Added additional integration tests:
+  - `test_allowances_appear_after_pay_lines`: Verifies JSON serialization order
+  - `test_gross_pay_includes_pay_lines_and_allowances`: Verifies totals calculation with multiple shifts
+- All tests verify:
+  - CalculationResult.allowances contains applicable allowances
+  - CalculationResult.totals.allowances_total equals sum of allowance amounts
+  - CalculationResult.totals.gross_pay includes pay_lines + allowances
+  - Audit trace includes allowance calculation steps
+**Result:** PASS
+**Notes:**
+- `cargo build` succeeds
+- `cargo test` passes all 219 tests (5 new integration tests)
+- `cargo clippy` produces no warnings
+- CalculationResult model already had allowances field and PayTotals.allowances_total from earlier epic
+- Integration tests demonstrate correct usage of existing infrastructure
+

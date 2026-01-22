@@ -188,7 +188,7 @@ Implement automatic allowance calculation, specifically the laundry allowance. T
         "expected_allowances_array_length": 0
       }
     ],
-    "passes": false
+    "passes": true
   }
 ]
 ```

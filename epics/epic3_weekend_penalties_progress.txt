@@ -86,3 +86,30 @@ Format:
 **Notes:** All 135 tests pass, 29 doctests pass, clippy produces no warnings, build succeeds
 **Commit:** Pending
 
+## Iteration 4 - 2026-01-22
+**Task:** US-3.3 - Overnight Shift Spanning Saturday/Sunday
+**Actions Taken:**
+- Created `src/calculation/overnight_shift.rs` with:
+  - `OvernightShiftResult` struct with `pay_lines`, `audit_steps`, and `total_amount` fields
+  - `calculate_overnight_shift(shift, employee, config, step_number)` function
+  - Uses `segment_by_day()` to split shifts at midnight boundaries
+  - Applies correct penalty rate to each segment based on day type:
+    - Weekday: ordinary time (with casual loading for casuals)
+    - Saturday: 150% for non-casuals, 175% for casuals
+    - Sunday: 175% for non-casuals, 200% for casuals
+  - Generates audit trail showing shift segmentation step
+  - Generates separate penalty/ordinary calculations per segment
+  - Summary audit step shows total calculation
+- Added rustdoc comments for all public types and functions
+- Implemented comprehensive test suite covering all PRD test cases:
+  - OVN-001: fulltime Sat 22:00 to Sun 06:00 → $385.29 (Sat $85.62 + Sun $299.67)
+  - OVN-002: casual Sat 22:00 to Sun 06:00 → $442.37 (Sat $99.89 + Sun $342.48)
+  - OVN-003: fulltime Fri 22:00 to Sat 06:00 → $313.94 (Fri $57.08 + Sat $256.86)
+  - OVN-004: casual Fri 22:00 to Sat 06:00 → $371.02 (Fri $71.35 + Sat $299.67)
+  - OVN-005: fulltime Sun 22:00 to Mon 06:00 → $271.13 (Sun $99.89 + Mon $171.24)
+- Additional tests for audit trail verification, single-day shifts, shift_id propagation
+- Updated `src/calculation/mod.rs` to export new types
+**Result:** PASS
+**Notes:** All 147 tests pass, 30 doctests pass, clippy produces no warnings, build succeeds
+**Commit:** Pending
+

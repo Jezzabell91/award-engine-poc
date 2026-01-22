@@ -1,0 +1,41 @@
+[package]
+name = "award-engine"
+version = "0.1.0"
+edition = "2024"
+description = "Award Interpretation Engine for Australian awards"
+license = "MIT"
+
+[dependencies]
+# Decimal math for monetary calculations
+rust_decimal = { version = "1.33", features = ["serde", "serde-with-str"] }
+
+# Date/time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+
+# HTTP server
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
+
+# Error handling
+thiserror = "1.0"
+
+# UUIDs
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Logging/tracing
+tracing = "0.1"
+
+[dev-dependencies]
+# Benchmarking
+criterion = "0.5"
+
+# Property testing
+proptest = "1.0"
+
+[profile.release]
+lto = true

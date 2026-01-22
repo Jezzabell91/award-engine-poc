@@ -110,7 +110,7 @@ Establish the Rust project structure, define all core data types, and implement 
       "cargo test",
       "cargo clippy -- -D warnings"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.2",

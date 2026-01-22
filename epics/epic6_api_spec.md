@@ -272,7 +272,7 @@ Expose the calculation engine via an HTTP API and create the integration test su
         "expected_gross_pay": "385.29"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-6.5",

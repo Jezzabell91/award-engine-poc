@@ -4,3 +4,5 @@
 //! and calculating pay based on shifts, employee classifications, and award rules.
 
 #![warn(missing_docs)]
+
+pub mod models;

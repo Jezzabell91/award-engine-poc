@@ -153,7 +153,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected": "is_casual() returns false"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.3",

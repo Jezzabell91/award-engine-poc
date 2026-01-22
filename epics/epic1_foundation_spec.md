@@ -24,7 +24,7 @@ This PoC validates technical approach for interpreting the Aged Care Award 2010 
 
 ### Quality Requirements
 
-- Use Rust 2021 edition
+- Use Rust latest stable edition
 - All public items must have rustdoc comments
 - Use `thiserror` for error types
 - Use `rust_decimal` for all monetary calculations
@@ -102,7 +102,7 @@ Establish the Rust project structure, define all core data types, and implement 
       "Cargo.toml contains tracing",
       "Dev dependencies include criterion for benchmarking",
       "Dev dependencies include proptest for property testing",
-      "Uses Rust 2021 edition",
+      "Uses Rust latest stable edition",
       "Release profile has LTO enabled"
     ],
     "test_commands": [

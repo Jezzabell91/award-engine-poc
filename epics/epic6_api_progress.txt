@@ -58,3 +58,31 @@ Format:
 - Full audit trace with step numbers and clause references
 **Commit:** 7670c5b
 
+## Iteration 2 - 2026-01-22
+**Task:** US-6.2 Health Check Endpoint
+**Actions Taken:**
+- Added `HealthResponse` type in `response.rs` with:
+  - `status`: "healthy" or "unhealthy"
+  - `version`: Optional version string (present when healthy)
+  - `reason`: Optional error reason (present when unhealthy)
+- Implemented `GET /health` endpoint in `handlers.rs`
+- Handler verifies configuration accessibility via panic catch
+- Returns HTTP 200 with `{"status": "healthy", "version": "0.1.0"}` when healthy
+- Returns HTTP 503 with `{"status": "unhealthy", "reason": "..."}` if configuration fails
+- Added `HealthResponse` to module exports
+- Wrote 6 tests for health endpoint:
+  - `test_health_001_healthy_service_returns_200` (verifies 200 status and JSON format)
+  - `test_health_response_format` (verifies JSON structure)
+  - `test_health_response_healthy` (unit test for healthy response)
+  - `test_health_response_unhealthy` (unit test for unhealthy response)
+  - `test_health_response_healthy_serialization` (JSON serialization)
+  - `test_health_response_unhealthy_serialization` (JSON serialization)
+**Result:** PASS
+**Notes:**
+- All 239 tests pass (including 6 new health tests)
+- `cargo build` succeeds
+- `cargo clippy` produces no warnings
+- Response includes Content-Type: application/json header
+- Version field omitted when unhealthy, reason field omitted when healthy (via serde skip_serializing_if)
+**Commit:** 5413245
+

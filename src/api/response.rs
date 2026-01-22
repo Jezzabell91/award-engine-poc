@@ -12,6 +12,39 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::EngineError;
 
+/// Health check response structure.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HealthResponse {
+    /// Health status ("healthy" or "unhealthy").
+    pub status: String,
+    /// Engine version (present when healthy).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+    /// Reason for unhealthy status (present when unhealthy).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+impl HealthResponse {
+    /// Creates a healthy response with version information.
+    pub fn healthy() -> Self {
+        Self {
+            status: "healthy".to_string(),
+            version: Some(env!("CARGO_PKG_VERSION").to_string()),
+            reason: None,
+        }
+    }
+
+    /// Creates an unhealthy response with a reason.
+    pub fn unhealthy(reason: impl Into<String>) -> Self {
+        Self {
+            status: "unhealthy".to_string(),
+            version: None,
+            reason: Some(reason.into()),
+        }
+    }
+}
+
 /// API error response structure.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiError {
@@ -191,5 +224,41 @@ mod tests {
         let api_error: ApiErrorResponse = engine_error.into();
         assert_eq!(api_error.status, StatusCode::BAD_REQUEST);
         assert_eq!(api_error.error.code, "CLASSIFICATION_NOT_FOUND");
+    }
+
+    #[test]
+    fn test_health_response_healthy() {
+        let response = HealthResponse::healthy();
+        assert_eq!(response.status, "healthy");
+        assert_eq!(response.version, Some("0.1.0".to_string()));
+        assert!(response.reason.is_none());
+    }
+
+    #[test]
+    fn test_health_response_unhealthy() {
+        let response = HealthResponse::unhealthy("Configuration error");
+        assert_eq!(response.status, "unhealthy");
+        assert!(response.version.is_none());
+        assert_eq!(response.reason, Some("Configuration error".to_string()));
+    }
+
+    #[test]
+    fn test_health_response_healthy_serialization() {
+        let response = HealthResponse::healthy();
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("\"status\":\"healthy\""));
+        assert!(json.contains("\"version\":\"0.1.0\""));
+        // Reason should not appear in healthy response
+        assert!(!json.contains("reason"));
+    }
+
+    #[test]
+    fn test_health_response_unhealthy_serialization() {
+        let response = HealthResponse::unhealthy("Database unreachable");
+        let json = serde_json::to_string(&response).unwrap();
+        assert!(json.contains("\"status\":\"unhealthy\""));
+        assert!(json.contains("\"reason\":\"Database unreachable\""));
+        // Version should not appear in unhealthy response
+        assert!(!json.contains("version"));
     }
 }

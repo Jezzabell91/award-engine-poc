@@ -192,7 +192,7 @@ Expose the calculation engine via an HTTP API and create the integration test su
         "expected_body": {"status": "healthy", "version": "0.1.0"}
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-6.3",

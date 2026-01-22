@@ -8,7 +8,7 @@ use axum::{
     extract::{rejection::JsonRejection, State},
     http::{header, StatusCode},
     response::IntoResponse,
-    routing::post,
+    routing::{get, post},
     Json, Router,
 };
 use chrono::Utc;
@@ -28,14 +28,51 @@ use crate::models::{
 };
 
 use super::request::CalculationRequest;
-use super::response::{ApiError, ApiErrorResponse};
+use super::response::{ApiError, ApiErrorResponse, HealthResponse};
 use super::state::AppState;
 
 /// Creates the API router with all endpoints.
 pub fn create_router(state: AppState) -> Router {
     Router::new()
         .route("/calculate", post(calculate_handler))
+        .route("/health", get(health_handler))
         .with_state(state)
+}
+
+/// Handler for GET /health endpoint.
+///
+/// Returns the health status and version of the service.
+/// Returns 200 OK when healthy, 503 Service Unavailable when unhealthy.
+async fn health_handler(State(state): State<AppState>) -> impl IntoResponse {
+    // Verify configuration is available by attempting to access it
+    let config_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let _ = state.config().config();
+    }));
+
+    match config_result {
+        Ok(_) => {
+            // Configuration is accessible, service is healthy
+            let response = HealthResponse::healthy();
+            info!("Health check: healthy");
+            (
+                StatusCode::OK,
+                [(header::CONTENT_TYPE, "application/json")],
+                Json(response),
+            )
+                .into_response()
+        }
+        Err(_) => {
+            // Configuration access failed, service is unhealthy
+            let response = HealthResponse::unhealthy("Configuration cannot be loaded");
+            warn!("Health check: unhealthy - configuration error");
+            (
+                StatusCode::SERVICE_UNAVAILABLE,
+                [(header::CONTENT_TYPE, "application/json")],
+                Json(response),
+            )
+                .into_response()
+        }
+    }
 }
 
 /// Handler for POST /calculate endpoint.
@@ -705,5 +742,66 @@ mod tests {
         );
         assert_eq!(result.allowances.len(), 1);
         assert_eq!(result.allowances[0].allowance_type, "laundry");
+    }
+
+    #[tokio::test]
+    async fn test_health_001_healthy_service_returns_200() {
+        let state = create_test_state();
+        let router = create_router(state);
+
+        let response = router
+            .oneshot(
+                Request::builder()
+                    .method("GET")
+                    .uri("/health")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+
+        // Verify Content-Type header
+        let content_type = response.headers().get("content-type").unwrap();
+        assert_eq!(content_type, "application/json");
+
+        // Verify response body
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let result: HealthResponse = serde_json::from_slice(&body).unwrap();
+
+        assert_eq!(result.status, "healthy");
+        assert_eq!(result.version, Some("0.1.0".to_string()));
+        assert!(result.reason.is_none());
+    }
+
+    #[tokio::test]
+    async fn test_health_response_format() {
+        let state = create_test_state();
+        let router = create_router(state);
+
+        let response = router
+            .oneshot(
+                Request::builder()
+                    .method("GET")
+                    .uri("/health")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+
+        // Verify JSON can be parsed and contains expected fields
+        let json: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert_eq!(json["status"], "healthy");
+        assert_eq!(json["version"], "0.1.0");
+        // Reason should not be present in healthy response
+        assert!(json.get("reason").is_none());
     }
 }

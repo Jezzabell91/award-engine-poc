@@ -10,5 +10,5 @@ mod state;
 
 pub use handlers::create_router;
 pub use request::CalculationRequest;
-pub use response::ApiError;
+pub use response::{ApiError, HealthResponse};
 pub use state::AppState;

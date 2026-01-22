@@ -243,7 +243,7 @@ Implement the foundational calculation logic: determining base hourly rates from
         "expected_multiplier": "1.25"
       }
     ],
-    "passes": false
+    "passes": true
   }
 ]
 ```

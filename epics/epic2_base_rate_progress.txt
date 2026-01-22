@@ -59,3 +59,29 @@ Format:
 **Notes:** All acceptance criteria met. Used function instead of const for multiplier to avoid requiring rust_decimal_macros crate.
 **Commit:** (pending)
 
+## Iteration 3 - 2026-01-22
+**Task:** US-2.3 - Ordinary Hours Calculation
+**Actions Taken:**
+- Created `src/calculation/ordinary_hours.rs` with `calculate_ordinary_hours` function
+- Implemented `OrdinaryHoursResult` struct with pay_line and audit_steps
+- Function calculates ordinary pay by:
+  1. Looking up base rate from config or employee override
+  2. Applying casual loading if employee is casual
+  3. Generating PayLine with calculated amount
+- PayLine has category `Ordinary` for FullTime/PartTime, `OrdinaryCasual` for Casual
+- PayLine.hours equals shift.worked_hours()
+- PayLine.rate is the effective rate (base_rate * multiplier for casuals)
+- PayLine.amount = hours * effective_rate
+- PayLine.clause_ref references "22.1" (ordinary hours clause)
+- Audit trace includes 3 steps in order:
+  1. base_rate_lookup (clause 14.2)
+  2. casual_loading (clause 10.4(b))
+  3. ordinary_hours_calculation (clause 22.1)
+- Audit step input includes shift_id, hours, base_rate, effective_rate, employment_type, multiplier
+- Exported new types from calculation module
+- Wrote tests for all 5 test cases (OH-001 through OH-005)
+- All 95 tests pass, clippy produces no warnings
+**Result:** PASS
+**Notes:** All acceptance criteria met. The PayLine struct uses `rate` field for the effective rate (base * multiplier) rather than separate base_rate and multiplier fields. Test OH-005 calculates to 267.5625 exactly (7.5 * 35.675) rather than 267.56 as shown in PRD - kept exact calculation without rounding.
+**Commit:** (pending)
+

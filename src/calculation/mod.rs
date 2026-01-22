@@ -5,6 +5,8 @@
 
 mod base_rate;
 mod casual_loading;
+mod ordinary_hours;
 
 pub use base_rate::{BaseRateLookupResult, get_base_rate};
 pub use casual_loading::{CasualLoadingResult, apply_casual_loading, casual_loading_multiplier};
+pub use ordinary_hours::{OrdinaryHoursResult, calculate_ordinary_hours};

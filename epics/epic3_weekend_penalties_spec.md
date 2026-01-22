@@ -140,7 +140,7 @@ Implement Saturday and Sunday penalty rate calculations. This introduces the con
         "expected_amount": "324.64"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-3.2",

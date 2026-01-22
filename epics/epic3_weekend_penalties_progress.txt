@@ -38,3 +38,27 @@ Format:
 **Notes:** All 117 tests pass, clippy produces no warnings, build succeeds
 **Commit:** Pending
 
+## Iteration 2 - 2026-01-22
+**Task:** US-3.1 - Saturday Penalty Rate
+**Actions Taken:**
+- Created `src/calculation/saturday_penalty.rs` with:
+  - `SaturdayPayResult` struct with `pay_line` and `audit_step` fields
+  - `calculate_saturday_pay(segment, employee, base_rate, config, step_number)` function
+  - Full-time/Part-time employees get 150% multiplier (clause 23.1)
+  - Casual employees get 175% multiplier (clause 23.2(a)) - NOT cumulative with casual loading
+  - PayLine.category is Saturday for non-casuals, SaturdayCasual for casuals
+  - Correct clause_ref for each employment type
+  - Audit step records penalty calculation with all inputs/outputs
+- Added rustdoc comments for all public types and functions
+- Implemented comprehensive test suite covering all PRD test cases:
+  - SAT-001: fulltime 8h Saturday → $342.48
+  - SAT-002: parttime 8h Saturday → $342.48
+  - SAT-003: casual 8h Saturday → $399.56
+  - SAT-004: fulltime 4h Saturday → $171.24
+  - SAT-005: casual 6.5h Saturday → $324.6425
+- Additional tests for audit trail verification and non-cumulative casual rate
+- Updated `src/calculation/mod.rs` to export new types
+**Result:** PASS
+**Notes:** All 126 tests pass, 28 doctests pass, clippy produces no warnings, build succeeds
+**Commit:** Pending
+

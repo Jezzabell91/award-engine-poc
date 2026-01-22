@@ -196,3 +196,57 @@ Format:
 **Notes:** All acceptance criteria met. CalculationResult model complete with full test coverage. Note: AuditTrace types are included here (fully implemented) as they are required fields of CalculationResult.
 **Commit:** c15331d
 
+## Iteration 6 - 2026-01-22
+**Task:** US-1.6 AuditTrace Model (verification only)
+**Actions Taken:**
+- Verified that AuditTrace, AuditStep, and AuditWarning were fully implemented in Iteration 5 as part of CalculationResult
+- All acceptance criteria already met:
+  - AuditTrace struct has steps (Vec<AuditStep>), warnings (Vec<AuditWarning>), duration_us (u64)
+  - AuditStep has all required fields (step_number, rule_id, rule_name, clause_ref, input, output, reasoning)
+  - AuditWarning has all required fields (code, message, severity)
+  - Serialization to JSON works correctly
+  - Test for steps ordered by step_number exists and passes
+- Updated PRD to mark US-1.6 as passes: true
+**Result:** PASS
+**Notes:** US-1.6 was already complete from Iteration 5. Just needed to update the PRD status.
+**Commit:** 9d22a23
+
+## Iteration 7 - 2026-01-22
+**Task:** US-1.7 Configuration Loader & US-1.8 Error Types
+**Actions Taken:**
+- Created config directory structure: config/ma000018/
+- Created YAML configuration files:
+  - config/ma000018/award.yaml - Award metadata (code, name, version, source_url)
+  - config/ma000018/classifications.yaml - Classifications with codes and names
+  - config/ma000018/rates/2025-07-01.yaml - Hourly rates and allowances by classification
+  - config/ma000018/penalties.yaml - Penalty rates for Saturday/Sunday by employment type, overtime thresholds
+- Created src/error.rs with EngineError enum using thiserror:
+  - ConfigNotFound { path: String }
+  - ConfigParseError { path: String, message: String }
+  - ClassificationNotFound { code: String }
+  - RateNotFound { classification: String, date: NaiveDate }
+  - InvalidShift { shift_id: String, message: String }
+  - InvalidEmployee { field: String, message: String }
+  - CalculationError { message: String }
+  - All variants implement std::error::Error and Display with human-readable messages
+- Created src/config/mod.rs, src/config/types.rs, src/config/loader.rs:
+  - ConfigLoader::load(path) loads configuration from directory
+  - Configuration includes award metadata, classifications, rates, penalties
+  - get_classification(code) returns classification or error
+  - get_hourly_rate(classification, date) returns rate for effective date
+  - get_penalty(day_type, employment_type) returns multiplier
+  - Malformed YAML returns descriptive error
+  - Missing file returns error indicating which file
+- Updated src/lib.rs to export config and error modules
+- Added comprehensive unit tests:
+  - CL-001: load valid configuration
+  - CL-002: get_hourly_rate for dce_level_3 returns 28.54
+  - CL-003: get_penalty for Saturday casual returns 1.75
+  - CL-004: unknown classification returns ClassificationNotFound error
+  - Tests for all error types with correct display messages
+  - Tests for error propagation with ? operator
+- Verified cargo build, cargo test (69 unit tests + 20 doc tests pass), cargo clippy pass
+- Ran cargo fmt
+**Result:** PASS
+**Notes:** All acceptance criteria met for both US-1.7 and US-1.8. Configuration loading is complete with full test coverage. Error types provide descriptive messages and work with Rust's error propagation.
+**Commit:** 9d22a23

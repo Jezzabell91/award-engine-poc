@@ -1,0 +1,8 @@
+effective_date: 2025-07-01
+rates:
+  dce_level_3:
+    weekly: 1084.70
+    hourly: 28.54
+allowances:
+  laundry_per_shift: 0.32
+  laundry_per_week: 1.49

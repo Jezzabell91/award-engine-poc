@@ -1,0 +1,23 @@
+penalties:
+  saturday:
+    clause: "23.1, 23.2(a)"
+    full_time: 1.50
+    part_time: 1.50
+    casual: 1.75
+  sunday:
+    clause: "23.1, 23.2(b)"
+    full_time: 1.75
+    part_time: 1.75
+    casual: 2.00
+overtime:
+  daily_threshold_hours: 8
+  weekday:
+    clause: "25.1"
+    first_two_hours:
+      full_time: 1.50
+      part_time: 1.50
+      casual: 1.875
+    after_two_hours:
+      full_time: 2.00
+      part_time: 2.00
+      casual: 2.50

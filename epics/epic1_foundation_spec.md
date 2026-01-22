@@ -322,7 +322,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected": "Steps can be iterated in order"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.7",
@@ -391,7 +391,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected": "ClassificationNotFound error"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.8",
@@ -426,7 +426,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected_message": "Classification not found: unknown"
       }
     ],
-    "passes": false
+    "passes": true
   }
 ]
 ```

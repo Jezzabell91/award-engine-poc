@@ -1,0 +1,5 @@
+classifications:
+  dce_level_3:
+    name: "Direct Care Employee Level 3 - Qualified"
+    description: "Qualified direct care worker"
+    clause: "14.2"

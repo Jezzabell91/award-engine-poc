@@ -363,7 +363,7 @@ Implement daily overtime calculation (hours exceeding 8 per day). This introduce
         "expected_reasoning": "Overtime after first 2 hours at 200%"
       }
     ],
-    "passes": false
+    "passes": true
   }
 ]
 ```

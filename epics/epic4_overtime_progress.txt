@@ -93,3 +93,28 @@ Format:
 - cargo build, cargo test (194 tests), and cargo clippy all pass with no warnings
 **Commit:** 6f135c5
 
+## Iteration 4 - 2026-01-22
+**Task:** US-4.4 - Overtime Audit Trail
+**Actions Taken:**
+- Created new module `src/calculation/overtime_audit.rs` for integration tests
+- Implemented 9 test cases verifying the complete audit trail structure:
+  - AT-OT-001: Verifies 12h weekday shift audit trace has correct steps in order
+  - AT-OT-002: Verifies OT tier 1 step has correct input (hours, base_rate) and output (multiplier, amount)
+  - AT-OT-003: Verifies OT tier 2 step has correct input and output
+  - Additional tests for daily overtime detection format, weekend overtime format, casual loading mention, and sequential step numbers
+- Verified existing implementations already satisfy all acceptance criteria:
+  - `daily_overtime.rs`: rule_id='daily_overtime_detection', clause_ref='22.1(c), 25.1'
+  - `weekday_overtime.rs`: rule_id='overtime_tier_1' and 'overtime_tier_2', clause_ref='25.1(a)(i)(A)'
+  - `weekend_overtime.rs`: rule_id='weekend_overtime', clause_ref='25.1(a)(i)(B)'
+- All audit steps include proper input/output fields and plain English reasoning
+- Updated `src/calculation/mod.rs` to include the new test module
+**Result:** PASS
+**Notes:**
+- All 3 PRD test cases verified (AT-OT-001, AT-OT-002, AT-OT-003)
+- Audit trace correctly includes steps in expected order: base_rate_lookup → daily_overtime_detection → overtime_tier_1 → overtime_tier_2
+- Input contains hours and base_rate; output contains multiplier and amount
+- Reasoning explains calculation in plain English
+- Casual overtime reasoning mentions casual loading
+- cargo build, cargo test (203 tests), and cargo clippy all pass with no warnings
+**Commit:** 1183259
+

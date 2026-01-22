@@ -12,6 +12,7 @@ mod daily_overtime;
 mod day_detection;
 mod ordinary_hours;
 mod overnight_shift;
+mod overtime_audit;
 mod saturday_penalty;
 mod sunday_penalty;
 mod weekday_overtime;

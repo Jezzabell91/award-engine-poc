@@ -189,6 +189,53 @@ impl From<EngineError> for ApiErrorResponse {
     }
 }
 
+/// Information about a supported award.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SupportedAward {
+    /// The Fair Work award code (e.g., "MA000018").
+    pub code: String,
+    /// The human-readable name of the award.
+    pub name: String,
+    /// List of supported classification codes.
+    pub classifications: Vec<String>,
+    /// The effective date of the award configuration.
+    pub effective_date: String,
+}
+
+/// Response for the GET /info endpoint.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfoResponse {
+    /// The engine version.
+    pub engine_version: String,
+    /// List of supported awards.
+    pub supported_awards: Vec<SupportedAward>,
+}
+
+impl InfoResponse {
+    /// Creates an InfoResponse from the loaded configuration.
+    pub fn from_config(config: &crate::config::ConfigLoader) -> Self {
+        let award_config = config.config();
+        let award = award_config.award();
+
+        // Get all classification codes
+        let mut classifications: Vec<String> =
+            award_config.classifications().keys().cloned().collect();
+        classifications.sort();
+
+        let supported_award = SupportedAward {
+            code: award.code.clone(),
+            name: award.name.clone(),
+            classifications,
+            effective_date: award.version.clone(),
+        };
+
+        Self {
+            engine_version: env!("CARGO_PKG_VERSION").to_string(),
+            supported_awards: vec![supported_award],
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

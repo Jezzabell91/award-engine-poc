@@ -86,3 +86,41 @@ Format:
 - Version field omitted when unhealthy, reason field omitted when healthy (via serde skip_serializing_if)
 **Commit:** 5413245
 
+## Iteration 3 - 2026-01-22
+**Task:** US-6.3 Info Endpoint
+**Actions Taken:**
+- Added `SupportedAward` struct in `response.rs` with:
+  - `code`: Fair Work award code (e.g., "MA000018")
+  - `name`: Human-readable award name
+  - `classifications`: List of supported classification codes
+  - `effective_date`: Award configuration effective date
+- Added `InfoResponse` struct with:
+  - `engine_version`: Current engine version from Cargo.toml
+  - `supported_awards`: Array of SupportedAward
+- Implemented `InfoResponse::from_config()` to build response from ConfigLoader
+- Added `GET /info` route in `create_router()`
+- Implemented `info_handler()` that:
+  - Retrieves configuration from app state
+  - Builds InfoResponse from config
+  - Returns HTTP 200 with JSON response
+  - Logs the request with award count
+- Exported `InfoResponse` from `api` module
+- Wrote 3 tests for info endpoint:
+  - `test_info_001_returns_supported_awards` (verifies 200 status, content-type, and full response)
+  - `test_info_response_format` (verifies JSON structure matches spec)
+  - `test_info_includes_all_classifications` (verifies classifications are sorted)
+**Result:** PASS
+**Notes:**
+- All 242 tests pass (including 3 new info endpoint tests)
+- `cargo build` succeeds
+- `cargo clippy` produces no warnings
+- Response includes Content-Type: application/json header
+- Classifications are alphabetically sorted in response
+- Matches expected response format from spec:
+  - `engine_version`: "0.1.0"
+  - `supported_awards[0].code`: "MA000018"
+  - `supported_awards[0].name`: "Aged Care Award 2010"
+  - `supported_awards[0].classifications`: ["dce_level_3"]
+  - `supported_awards[0].effective_date`: "2025-07-01"
+**Commit:** 010ceee
+

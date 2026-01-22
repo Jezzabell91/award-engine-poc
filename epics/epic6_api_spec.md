@@ -226,7 +226,7 @@ Expose the calculation engine via an HTTP API and create the integration test su
         }
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-6.4",

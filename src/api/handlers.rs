@@ -28,7 +28,7 @@ use crate::models::{
 };
 
 use super::request::CalculationRequest;
-use super::response::{ApiError, ApiErrorResponse, HealthResponse};
+use super::response::{ApiError, ApiErrorResponse, HealthResponse, InfoResponse};
 use super::state::AppState;
 
 /// Creates the API router with all endpoints.
@@ -36,6 +36,7 @@ pub fn create_router(state: AppState) -> Router {
     Router::new()
         .route("/calculate", post(calculate_handler))
         .route("/health", get(health_handler))
+        .route("/info", get(info_handler))
         .with_state(state)
 }
 
@@ -73,6 +74,21 @@ async fn health_handler(State(state): State<AppState>) -> impl IntoResponse {
                 .into_response()
         }
     }
+}
+
+/// Handler for GET /info endpoint.
+///
+/// Returns information about the engine version and supported awards.
+async fn info_handler(State(state): State<AppState>) -> impl IntoResponse {
+    let config = state.config();
+    let response = InfoResponse::from_config(config);
+    info!("Info request: returning {} supported award(s)", response.supported_awards.len());
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, "application/json")],
+        Json(response),
+    )
+        .into_response()
 }
 
 /// Handler for POST /calculate endpoint.
@@ -803,5 +819,108 @@ mod tests {
         assert_eq!(json["version"], "0.1.0");
         // Reason should not be present in healthy response
         assert!(json.get("reason").is_none());
+    }
+
+    #[tokio::test]
+    async fn test_info_001_returns_supported_awards() {
+        let state = create_test_state();
+        let router = create_router(state);
+
+        let response = router
+            .oneshot(
+                Request::builder()
+                    .method("GET")
+                    .uri("/info")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+
+        // Verify Content-Type header
+        let content_type = response.headers().get("content-type").unwrap();
+        assert_eq!(content_type, "application/json");
+
+        // Verify response body
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let result: InfoResponse = serde_json::from_slice(&body).unwrap();
+
+        assert_eq!(result.engine_version, "0.1.0");
+        assert_eq!(result.supported_awards.len(), 1);
+
+        let award = &result.supported_awards[0];
+        assert_eq!(award.code, "MA000018");
+        assert_eq!(award.name, "Aged Care Award 2010");
+        assert!(award.classifications.contains(&"dce_level_3".to_string()));
+        assert_eq!(award.effective_date, "2025-07-01");
+    }
+
+    #[tokio::test]
+    async fn test_info_response_format() {
+        let state = create_test_state();
+        let router = create_router(state);
+
+        let response = router
+            .oneshot(
+                Request::builder()
+                    .method("GET")
+                    .uri("/info")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+
+        // Verify JSON structure matches expected format
+        let json: serde_json::Value = serde_json::from_slice(&body).unwrap();
+        assert_eq!(json["engine_version"], "0.1.0");
+        assert!(json["supported_awards"].is_array());
+
+        let awards = json["supported_awards"].as_array().unwrap();
+        assert_eq!(awards.len(), 1);
+
+        let award = &awards[0];
+        assert_eq!(award["code"], "MA000018");
+        assert_eq!(award["name"], "Aged Care Award 2010");
+        assert!(award["classifications"].is_array());
+        assert_eq!(award["effective_date"], "2025-07-01");
+    }
+
+    #[tokio::test]
+    async fn test_info_includes_all_classifications() {
+        let state = create_test_state();
+        let router = create_router(state);
+
+        let response = router
+            .oneshot(
+                Request::builder()
+                    .method("GET")
+                    .uri("/info")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let result: InfoResponse = serde_json::from_slice(&body).unwrap();
+
+        // Verify classifications are included and sorted
+        let classifications = &result.supported_awards[0].classifications;
+        assert!(!classifications.is_empty());
+        // Verify the list is sorted
+        let mut sorted = classifications.clone();
+        sorted.sort();
+        assert_eq!(*classifications, sorted);
     }
 }

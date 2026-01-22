@@ -39,3 +39,23 @@ Format:
 **Notes:** All acceptance criteria met. Function signature includes step_number parameter for proper audit trail sequencing.
 **Commit:** (pending)
 
+## Iteration 2 - 2026-01-22
+**Task:** US-2.2 - Casual Loading Application
+**Actions Taken:**
+- Created `src/calculation/casual_loading.rs` with `apply_casual_loading` function
+- Implemented `CasualLoadingResult` struct with loaded_rate and audit step
+- Created `casual_loading_multiplier()` function returning Decimal 1.25
+- Applies 25% loading (multiplier 1.25) for casual employees
+- Returns unchanged rate for FullTime and PartTime employees
+- Audit step records rule_id: 'casual_loading', clause_ref: '10.4(b)'
+- Audit step input includes base_rate and employment_type
+- Audit step output includes loaded_rate and loading_applied flag
+- Audit reasoning explains calculation (e.g., '$28.54 x 1.25 = $35.675')
+- Used Decimal::normalize() for consistent string representation in audit
+- Exported new types from calculation module
+- Wrote tests for all 5 test cases (CL-001 through CL-005)
+- All 85 tests pass, clippy produces no warnings
+**Result:** PASS
+**Notes:** All acceptance criteria met. Used function instead of const for multiplier to avoid requiring rust_decimal_macros crate.
+**Commit:** (pending)
+

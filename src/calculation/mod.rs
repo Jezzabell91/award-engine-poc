@@ -4,5 +4,7 @@
 //! including base rate lookup, casual loading, and ordinary hours calculations.
 
 mod base_rate;
+mod casual_loading;
 
-pub use base_rate::{get_base_rate, BaseRateLookupResult};
+pub use base_rate::{BaseRateLookupResult, get_base_rate};
+pub use casual_loading::{CasualLoadingResult, apply_casual_loading, casual_loading_multiplier};

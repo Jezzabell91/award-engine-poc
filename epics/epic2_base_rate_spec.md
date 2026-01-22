@@ -171,7 +171,7 @@ Implement the foundational calculation logic: determining base hourly rates from
         "expected": "0.00"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-2.3",

@@ -111,3 +111,32 @@ Format:
 **Notes:** All acceptance criteria met. Shift model complete with full test coverage including overnight shift handling.
 **Commit:** c8cbf4d
 
+## Iteration 4 - 2026-01-22
+**Task:** US-1.4 PayPeriod Model
+**Actions Taken:**
+- Created src/models/pay_period.rs with:
+  - PublicHoliday struct with all required fields:
+    - date (NaiveDate)
+    - name (String)
+    - region (String)
+  - PayPeriod struct with all required fields:
+    - start_date (NaiveDate)
+    - end_date (NaiveDate)
+    - public_holidays (Vec<PublicHoliday>)
+  - contains_date(date) method returning bool (inclusive check)
+  - is_public_holiday(date) method returning bool
+  - Full serde Serialize/Deserialize support
+  - Rustdoc comments on all public items with examples
+- Updated src/models/mod.rs to export PayPeriod and PublicHoliday
+- Added comprehensive unit tests covering all PRD test cases:
+  - PP-001: contains_date within period → true
+  - PP-002: contains_date outside period → false
+  - PP-003: is_public_holiday returns true for Australia Day
+  - PP-004: is_public_holiday returns false when no holidays
+  - Additional tests for boundary dates, serialization, deserialization, multiple holidays
+- Verified cargo build, cargo test (30 unit tests + 7 doc tests pass), cargo clippy pass
+- Ran cargo fmt
+**Result:** PASS
+**Notes:** All acceptance criteria met. PayPeriod model complete with full test coverage.
+**Commit:** 7844697
+

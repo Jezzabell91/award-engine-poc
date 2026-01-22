@@ -32,13 +32,17 @@ tracing = "0.1"
 
 [dev-dependencies]
 # Benchmarking
-criterion = "0.5"
+criterion = { version = "0.5", features = ["async_tokio"] }
 
 # Property testing
 proptest = "1.0"
 
 # Testing HTTP services
 tower = { version = "0.5", features = ["util"] }
+
+[[bench]]
+name = "calculation_benchmarks"
+harness = false
 
 [profile.release]
 lto = true

@@ -168,7 +168,7 @@ Expose the calculation engine via an HTTP API and create the integration test su
         "expected_error_code": "CLASSIFICATION_NOT_FOUND"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-6.2",

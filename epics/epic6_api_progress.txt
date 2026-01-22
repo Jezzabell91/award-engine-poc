@@ -20,3 +20,41 @@ Format:
 
 <!-- Ralph: Append your progress below this line. Do not modify entries above. -->
 
+## Iteration 1 - 2026-01-22
+**Task:** US-6.1 Calculate Endpoint
+**Actions Taken:**
+- Created new `api` module with submodules: `handlers.rs`, `request.rs`, `response.rs`, `state.rs`
+- Implemented `POST /calculate` endpoint using axum framework
+- Created request types (`CalculationRequest`, `EmployeeRequest`, `ShiftRequest`, etc.) with serde serialization
+- Created response error types (`ApiError`, `ApiErrorResponse`) with proper HTTP status code mapping
+- Implemented calculation orchestration in `perform_calculation()` that:
+  - Loads configuration and validates classification exists
+  - Segments shifts by day (handles overnight shifts)
+  - Calculates ordinary hours with casual loading when applicable
+  - Applies Saturday/Sunday penalty rates
+  - Detects and calculates daily overtime (weekday and weekend)
+  - Calculates laundry allowance with weekly cap
+  - Aggregates pay lines, allowances, and totals
+  - Generates complete audit trace
+- Added correlation ID for request tracking via `tracing`
+- Implemented proper error handling for:
+  - Malformed JSON (400 Bad Request)
+  - Missing required fields (400 Bad Request with VALIDATION_ERROR)
+  - Unknown classification codes (400 Bad Request with CLASSIFICATION_NOT_FOUND)
+- Added `tower` dev dependency for testing with `oneshot`
+- Wrote 6 API tests covering all acceptance criteria:
+  - `test_api_001_valid_request_returns_200`
+  - `test_api_002_malformed_json_returns_400`
+  - `test_api_003_missing_employee_id_returns_400`
+  - `test_api_004_unknown_classification_returns_400`
+  - `test_fulltime_weekday_8h_calculation` (verifies $228.32 for 8h weekday)
+  - `test_casual_saturday_with_laundry` (verifies $399.88 for casual Saturday with laundry)
+**Result:** PASS
+**Notes:**
+- All 233 tests pass (including 6 new API tests)
+- `cargo build` succeeds
+- `cargo clippy` produces no warnings
+- Response includes Content-Type: application/json header
+- Full audit trace with step numbers and clause references
+**Commit:** 7670c5b
+

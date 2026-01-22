@@ -20,3 +20,22 @@ Format:
 
 <!-- Ralph: Append your progress below this line. Do not modify entries above. -->
 
+## Iteration 1 - 2026-01-22
+**Task:** US-4.1 - Daily Overtime Detection
+**Actions Taken:**
+- Created new module `src/calculation/daily_overtime.rs`
+- Implemented `detect_daily_overtime(worked_hours, threshold, step_number)` function
+- Function splits hours into ordinary (up to threshold) and overtime (excess)
+- Returns `DailyOvertimeDetection` struct with `ordinary_hours`, `overtime_hours`, and `audit_step`
+- Audit step includes rule_id: 'daily_overtime_detection', clause_ref: '22.1(c), 25.1'
+- Added `DEFAULT_DAILY_OVERTIME_THRESHOLD` constant (8 hours)
+- Implemented 16 test cases covering all acceptance criteria
+- Updated `src/calculation/mod.rs` to export new module
+**Result:** PASS
+**Notes:**
+- All 6 PRD test cases pass (DOD-001 through DOD-006)
+- Audit trail properly records input (worked_hours, threshold) and output (ordinary_hours, overtime_hours)
+- Reasoning explains detection outcome in plain English
+- cargo build, cargo test (164 tests), and cargo clippy all pass with no warnings
+**Commit:** 196fe25
+

@@ -3,10 +3,11 @@
 //! This module contains all the calculation functions for determining pay,
 //! including base rate lookup, casual loading, ordinary hours calculations,
 //! day detection for weekend penalty rates, Saturday penalty rates, Sunday penalty rates,
-//! and overnight shift calculations that span multiple days.
+//! overnight shift calculations that span multiple days, and daily overtime detection.
 
 mod base_rate;
 mod casual_loading;
+mod daily_overtime;
 mod day_detection;
 mod ordinary_hours;
 mod overnight_shift;
@@ -15,6 +16,7 @@ mod sunday_penalty;
 
 pub use base_rate::{BaseRateLookupResult, get_base_rate};
 pub use casual_loading::{CasualLoadingResult, apply_casual_loading, casual_loading_multiplier};
+pub use daily_overtime::{DailyOvertimeDetection, detect_daily_overtime, DEFAULT_DAILY_OVERTIME_THRESHOLD};
 pub use day_detection::{DayType, ShiftSegment, get_day_type, segment_by_day};
 pub use ordinary_hours::{OrdinaryHoursResult, calculate_ordinary_hours};
 pub use overnight_shift::{OvernightShiftResult, calculate_overnight_shift};

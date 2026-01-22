@@ -39,3 +39,27 @@ Format:
 - cargo build, cargo test (164 tests), and cargo clippy all pass with no warnings
 **Commit:** 196fe25
 
+## Iteration 2 - 2026-01-22
+**Task:** US-4.2 - Weekday Overtime Rate Calculation
+**Actions Taken:**
+- Created new module `src/calculation/weekday_overtime.rs`
+- Implemented `calculate_weekday_overtime(overtime_hours, base_rate, employee, config, date, shift_id, step_number_start)` function
+- Calculates tiered overtime rates per clause 25.1(a)(i)(A):
+  - Tier 1 (first 2 hours): 150% for non-casuals, 187.5% for casuals (1.5 × 1.25)
+  - Tier 2 (after 2 hours): 200% for non-casuals, 250% for casuals (2.0 × 1.25)
+- Returns `WeekdayOvertimeResult` struct with `pay_lines` (Vec<PayLine>) and `audit_steps` (Vec<AuditStep>)
+- PayLine.category is Overtime150 or Overtime200 as appropriate
+- Added `WEEKDAY_OT_TIER_1_THRESHOLD` constant (2 hours)
+- Audit step rule_id: 'overtime_tier_1' and 'overtime_tier_2' with clause_ref: '25.1(a)(i)(A)'
+- Implemented 18 test cases covering all acceptance criteria
+- Updated `src/calculation/mod.rs` to export new module
+**Result:** PASS
+**Notes:**
+- All 8 PRD test cases pass (WOT-001 through WOT-005, WCOT-001 through WCOT-003)
+- Casual overtime rates correctly include casual loading (187.5% and 250%)
+- Part-time employees get same rates as full-time per the Award
+- Audit trail records each tier calculation separately with input (hours, base_rate, employment_type) and output (multiplier, rate, amount)
+- Reasoning explains calculation in plain English, mentions casual loading when applicable
+- cargo build, cargo test (182 tests), and cargo clippy all pass with no warnings
+**Commit:** 226049e
+

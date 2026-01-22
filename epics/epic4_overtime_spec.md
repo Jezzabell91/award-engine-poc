@@ -252,7 +252,7 @@ Implement daily overtime calculation (hours exceeding 8 per day). This introduce
         "expected_total": "535.13"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-4.3",

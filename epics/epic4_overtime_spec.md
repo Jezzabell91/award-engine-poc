@@ -317,7 +317,7 @@ Implement daily overtime calculation (hours exceeding 8 per day). This introduce
         "note": "Ordinary 8h @ 2.0 = 456.64, OT 2h @ 2.5 = 142.70"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-4.4",

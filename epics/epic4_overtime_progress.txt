@@ -63,3 +63,33 @@ Format:
 - cargo build, cargo test (182 tests), and cargo clippy all pass with no warnings
 **Commit:** 226049e
 
+## Iteration 3 - 2026-01-22
+**Task:** US-4.3 - Weekend Overtime (Saturday/Sunday)
+**Actions Taken:**
+- Created new module `src/calculation/weekend_overtime.rs`
+- Implemented `calculate_weekend_overtime(overtime_hours, base_rate, employee, config, day_type, date, shift_id, step_number)` function
+- Weekend overtime is NOT tiered (unlike weekday overtime) - all hours at same rate
+- Rates per clause 25.1(a)(i)(B):
+  - Non-casuals (full-time/part-time): 200% from first hour
+  - Casuals: 250% (2.0 × 1.25) from first hour
+- Returns `WeekendOvertimeResult` struct with `pay_line` (Option<PayLine>) and `audit_step` (Option<AuditStep>)
+- PayLine.category is Overtime200 for all weekend overtime
+- Added weekend overtime configuration to `config/ma000018/penalties.yaml`
+- Added `WeekendOvertimeConfig` type to `src/config/types.rs`
+- Updated `OvertimeSection` struct to include weekend overtime config
+- Audit step rule_id: 'weekend_overtime' with clause_ref: '25.1(a)(i)(B)'
+- Implemented 12 test cases covering all acceptance criteria
+- Updated `src/calculation/mod.rs` to export new module
+- Updated `src/config/mod.rs` to export `WeekendOvertimeConfig`
+- Fixed test files (base_rate.rs, ordinary_hours.rs) to include weekend overtime config
+**Result:** PASS
+**Notes:**
+- All 4 PRD test cases pass (SATOT-001, SATOT-002, SUNOT-001, SUNOT-002)
+- Weekend overtime correctly NOT tiered - single pay line for all overtime hours
+- Casual overtime rates correctly include casual loading (250%)
+- Part-time employees get same rates as full-time per the Award
+- Audit trail records calculation with input (hours, base_rate, employment_type, day_type) and output (multiplier, rate, amount)
+- Reasoning explains calculation in plain English, mentions casual loading when applicable
+- cargo build, cargo test (194 tests), and cargo clippy all pass with no warnings
+**Commit:** 6f135c5
+

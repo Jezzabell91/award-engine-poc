@@ -154,6 +154,7 @@ mod tests {
     use crate::config::{
         AllowanceRates, AwardMetadata, Classification, ClassificationRate, OvertimeConfig,
         OvertimeRates, OvertimeSection, Penalties, PenaltyConfig, PenaltyRates, RateConfig,
+        WeekendOvertimeConfig,
     };
     use chrono::{NaiveDate, NaiveDateTime};
     use std::collections::HashMap;
@@ -236,6 +237,19 @@ mod tests {
                         full_time: dec("2.0"),
                         part_time: dec("2.0"),
                         casual: dec("2.25"),
+                    },
+                },
+                weekend: WeekendOvertimeConfig {
+                    clause: "25.1(a)(i)(B)".to_string(),
+                    saturday: OvertimeRates {
+                        full_time: dec("2.0"),
+                        part_time: dec("2.0"),
+                        casual: dec("2.5"),
+                    },
+                    sunday: OvertimeRates {
+                        full_time: dec("2.0"),
+                        part_time: dec("2.0"),
+                        casual: dec("2.5"),
                     },
                 },
             },

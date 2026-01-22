@@ -21,3 +21,13 @@ overtime:
       full_time: 2.00
       part_time: 2.00
       casual: 2.50
+  weekend:
+    clause: "25.1(a)(i)(B)"
+    saturday:
+      full_time: 2.00
+      part_time: 2.00
+      casual: 2.50
+    sunday:
+      full_time: 2.00
+      part_time: 2.00
+      casual: 2.50

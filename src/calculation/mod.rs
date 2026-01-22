@@ -4,7 +4,7 @@
 //! including base rate lookup, casual loading, ordinary hours calculations,
 //! day detection for weekend penalty rates, Saturday penalty rates, Sunday penalty rates,
 //! overnight shift calculations that span multiple days, daily overtime detection,
-//! and weekday overtime rate calculation.
+//! weekday overtime rate calculation, and weekend overtime rate calculation.
 
 mod base_rate;
 mod casual_loading;
@@ -15,6 +15,7 @@ mod overnight_shift;
 mod saturday_penalty;
 mod sunday_penalty;
 mod weekday_overtime;
+mod weekend_overtime;
 
 pub use base_rate::{BaseRateLookupResult, get_base_rate};
 pub use casual_loading::{CasualLoadingResult, apply_casual_loading, casual_loading_multiplier};
@@ -29,3 +30,4 @@ pub use sunday_penalty::{SundayPayResult, calculate_sunday_pay};
 pub use weekday_overtime::{
     WEEKDAY_OT_TIER_1_THRESHOLD, WeekdayOvertimeResult, calculate_weekday_overtime,
 };
+pub use weekend_overtime::{WeekendOvertimeResult, calculate_weekend_overtime};

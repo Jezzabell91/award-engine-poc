@@ -19,4 +19,5 @@ pub use loader::ConfigLoader;
 pub use types::{
     AllowanceRates, AwardConfig, AwardMetadata, Classification, ClassificationRate, OvertimeConfig,
     OvertimeRates, OvertimeSection, Penalties, PenaltyConfig, PenaltyRates, RateConfig,
+    WeekendOvertimeConfig,
 };

@@ -98,7 +98,7 @@ pub struct OvertimeRates {
     pub casual: Decimal,
 }
 
-/// Overtime configuration.
+/// Overtime configuration for weekday.
 #[derive(Debug, Clone, Deserialize)]
 pub struct OvertimeConfig {
     /// Reference to the award clause for overtime.
@@ -107,6 +107,17 @@ pub struct OvertimeConfig {
     pub first_two_hours: OvertimeRates,
     /// Rates for overtime after two hours.
     pub after_two_hours: OvertimeRates,
+}
+
+/// Weekend overtime configuration.
+#[derive(Debug, Clone, Deserialize)]
+pub struct WeekendOvertimeConfig {
+    /// Reference to the award clause for weekend overtime.
+    pub clause: String,
+    /// Saturday overtime rates.
+    pub saturday: OvertimeRates,
+    /// Sunday overtime rates.
+    pub sunday: OvertimeRates,
 }
 
 /// Penalty configuration from penalties.yaml.
@@ -134,6 +145,8 @@ pub struct OvertimeSection {
     pub daily_threshold_hours: u32,
     /// Weekday overtime rates.
     pub weekday: OvertimeConfig,
+    /// Weekend overtime rates.
+    pub weekend: WeekendOvertimeConfig,
 }
 
 /// The complete award configuration loaded from YAML files.

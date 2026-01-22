@@ -20,3 +20,22 @@ Format:
 
 <!-- Ralph: Append your progress below this line. Do not modify entries above. -->
 
+## Iteration 1 - 2026-01-22
+**Task:** US-2.1 - Base Rate Lookup
+**Actions Taken:**
+- Created `src/calculation/mod.rs` module for calculation logic
+- Created `src/calculation/base_rate.rs` with `get_base_rate` function
+- Implemented `BaseRateLookupResult` struct with rate and audit step
+- Added support for employee override rates (takes precedence)
+- Added config lookup by classification code and effective date
+- Returns `ClassificationNotFound` error for unknown classifications
+- Returns `RateNotFound` error when no rate exists for the effective date
+- Audit step records rule_id: 'base_rate_lookup', clause_ref: '14.2'
+- Audit step input includes classification_code, output includes determined rate
+- Added `Penalties` and `OvertimeSection` to config module exports
+- Wrote tests for all 4 test cases (BR-001 through BR-004)
+- All tests pass, clippy produces no warnings
+**Result:** PASS
+**Notes:** All acceptance criteria met. Function signature includes step_number parameter for proper audit trail sequencing.
+**Commit:** (pending)
+

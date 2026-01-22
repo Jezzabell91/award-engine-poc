@@ -18,5 +18,5 @@ mod types;
 pub use loader::ConfigLoader;
 pub use types::{
     AllowanceRates, AwardConfig, AwardMetadata, Classification, ClassificationRate, OvertimeConfig,
-    OvertimeRates, PenaltyConfig, PenaltyRates, RateConfig,
+    OvertimeRates, OvertimeSection, Penalties, PenaltyConfig, PenaltyRates, RateConfig,
 };

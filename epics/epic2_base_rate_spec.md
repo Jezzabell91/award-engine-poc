@@ -115,7 +115,7 @@ Implement the foundational calculation logic: determining base hourly rates from
         "expected": "RateNotFound error"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-2.2",

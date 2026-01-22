@@ -20,3 +20,21 @@ Format:
 
 <!-- Ralph: Append your progress below this line. Do not modify entries above. -->
 
+## Iteration 1 - 2026-01-22
+**Task:** US-3.4 - Day Detection Logic
+**Actions Taken:**
+- Created `src/calculation/day_detection.rs` with:
+  - `DayType` enum with `Weekday`, `Saturday`, `Sunday` variants
+  - `get_day_type(datetime)` function to determine day type from any datetime
+  - `ShiftSegment` struct with `start_time`, `end_time`, `day_type`, `hours` fields
+  - `segment_by_day(shift)` function that splits shifts at midnight boundaries
+- Added rustdoc comments for all public types and functions
+- Implemented comprehensive test suite covering all test cases from PRD:
+  - DD-001 through DD-007 test cases
+  - Additional tests for all weekdays
+  - Edge cases for overnight shifts, zero-duration shifts, segment ordering
+- Updated `src/calculation/mod.rs` to export new types
+**Result:** PASS
+**Notes:** All 117 tests pass, clippy produces no warnings, build succeeds
+**Commit:** Pending
+

@@ -360,7 +360,7 @@ Implement Saturday and Sunday penalty rate calculations. This introduces the con
         "expected_segments": 2
       }
     ],
-    "passes": false
+    "passes": true
   }
 ]
 ```

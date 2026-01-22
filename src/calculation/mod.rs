@@ -1,12 +1,15 @@
 //! Calculation logic for the Award Interpretation Engine.
 //!
 //! This module contains all the calculation functions for determining pay,
-//! including base rate lookup, casual loading, and ordinary hours calculations.
+//! including base rate lookup, casual loading, ordinary hours calculations,
+//! and day detection for weekend penalty rates.
 
 mod base_rate;
 mod casual_loading;
+mod day_detection;
 mod ordinary_hours;
 
 pub use base_rate::{BaseRateLookupResult, get_base_rate};
 pub use casual_loading::{CasualLoadingResult, apply_casual_loading, casual_loading_multiplier};
+pub use day_detection::{DayType, ShiftSegment, get_day_type, segment_by_day};
 pub use ordinary_hours::{OrdinaryHoursResult, calculate_ordinary_hours};

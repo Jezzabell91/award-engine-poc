@@ -208,7 +208,7 @@ Establish the Rust project structure, define all core data types, and implement 
         "expected_hours": "0.0"
       }
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": "US-1.4",
